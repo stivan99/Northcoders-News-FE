@@ -8,6 +8,7 @@ import Body from "./components/Body";
 import Footer from "./components/Footer";
 import Users from "./components/Users";
 import Topics from "./components/Topics";
+import OpenedArticle from "./components/OpenedArticle";
 function App() {
   //const [count, setCount] = useState(0)
   return (
@@ -18,6 +19,7 @@ function App() {
         <Filters />
         <Routes>
           <Route path="/" element={<Body />} />
+          <Route path="/articles/:article_id" element={<OpenedArticle />} />
           <Route path="/topics" element={<Topics />} />
           <Route path="/users" element={<Users />} />
         </Routes>
