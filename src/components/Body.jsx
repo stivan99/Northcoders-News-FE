@@ -13,8 +13,6 @@ function Body() {
     axios
       .get(url)
       .then((response) => {
-        console.log(response.data);
-
         setArticles(response.data);
         setIsLoading(false);
       })
