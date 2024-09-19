@@ -17,8 +17,6 @@ function ArticleDetail() {
         `https://northcoders-news-be.onrender.com/api/articles/${article_id}`
       )
       .then((response) => {
-        console.log(response.data);
-
         setArticle(response.data);
         setIsLoading(false);
       })
@@ -34,7 +32,6 @@ function ArticleDetail() {
         `https://northcoders-news-be.onrender.com/api/articles/${article_id}/comments`
       )
       .then((comments) => {
-        console.log(comments.data);
         setComments(comments.data);
         setIsCommentsLoading(false);
       })
