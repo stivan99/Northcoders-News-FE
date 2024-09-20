@@ -11,7 +11,7 @@ function OpenedArticle() {
   const [comments, setComments] = useState([]);
   const [isCommentsLoading, setIsCommentsLoading] = useState(true);
   const [commentBody, setCommentBody] = useState("");
-
+  const loggedInUser = "grumpy19";
   useEffect(() => {
     axios
       .get(
@@ -51,7 +51,7 @@ function OpenedArticle() {
     const newComment = {
       body: commentBody,
       votes: 0,
-      author: "grumpy19",
+      author: loggedInUser,
       article_id: article_id,
     };
 
@@ -66,6 +66,21 @@ function OpenedArticle() {
       })
       .catch((error) => {
         console.error("Error posting comment:", error);
+      });
+  };
+
+  const handleDeleteComment = (commentId) => {
+    axios
+      .delete(
+        `https://northcoders-news-be.onrender.com/api/comments/${commentId}`
+      )
+      .then(() => {
+        setComments(
+          comments.filter((comment) => comment.comment_id !== commentId)
+        );
+      })
+      .catch((error) => {
+        console.log("Error deleting comment:", error);
       });
   };
 
@@ -88,6 +103,8 @@ function OpenedArticle() {
         commentBody={commentBody}
         handleCommentChange={handleCommentChange}
         handleCommentSubmit={handleCommentSubmit}
+        handleDeleteComment={handleDeleteComment}
+        loggedInUser={loggedInUser}
       />
     </div>
   );
