@@ -91,10 +91,6 @@ function Article({
           <button type="submit">Post Comment</button>
         </form>
         {comments.map((comment) => {
-          // Log the values here
-          console.log("Logged In User:", loggedInUser);
-          console.log("Comment Author:", comment.author);
-
           return (
             <div key={comment.comment_id}>
               <p>{comment.body}</p>
