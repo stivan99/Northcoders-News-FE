@@ -15,6 +15,8 @@ function Article({
   commentBody,
   handleCommentChange,
   handleCommentSubmit,
+  handleDeleteComment,
+  loggedInUser,
 }) {
   const [userUpvoted, setUserUpvoted] = useState(false);
   const [userDownvoted, setUserDownvoted] = useState(false);
@@ -88,14 +90,25 @@ function Article({
           ></textarea>
           <button type="submit">Post Comment</button>
         </form>
-        {comments.map((comment) => (
-          <div key={comment.comment_id}>
-            <p>{comment.body}</p>
-            <p>By: {comment.author}</p>
-            <p>Votes: {comment.votes}</p>
-            <p>Created At: {new Date(comment.created_at).toLocaleString()}</p>
-          </div>
-        ))}
+        {comments.map((comment) => {
+          // Log the values here
+          console.log("Logged In User:", loggedInUser);
+          console.log("Comment Author:", comment.author);
+
+          return (
+            <div key={comment.comment_id}>
+              <p>{comment.body}</p>
+              <p>By: {comment.author}</p>
+              <p>Votes: {comment.votes}</p>
+              <p>Created At: {new Date(comment.created_at).toLocaleString()}</p>
+              {loggedInUser === comment.author && (
+                <button onClick={() => handleDeleteComment(comment.comment_id)}>
+                  Delete
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
