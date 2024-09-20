@@ -12,17 +12,31 @@ function Article({
   created_at = "",
   votes = 0,
   topic,
+  commentBody,
+  handleCommentChange,
+  handleCommentSubmit,
 }) {
-  const [userVoted, setUserVoted] = useState(false);
+  const [userUpvoted, setUserUpvoted] = useState(false);
+  const [userDownvoted, setUserDownvoted] = useState(false);
   const [voteCount, setVoteCount] = useState(votes);
 
-  const handleVote = () => {
-    if (userVoted) {
+  const handleUpVote = () => {
+    if (userUpvoted) {
       setVoteCount(voteCount - 1);
-      setUserVoted(false);
+      setUserUpvoted(false);
     } else {
       setVoteCount(voteCount + 1);
-      setUserVoted(true);
+      setUserUpvoted(true);
+    }
+  };
+
+  const handleDownvote = () => {
+    if (userDownvoted) {
+      setVoteCount(voteCount + 1);
+      setUserDownvoted(false);
+    } else {
+      setVoteCount(voteCount - 1);
+      setUserDownvoted(true);
     }
   };
 
@@ -55,15 +69,31 @@ function Article({
       <p>Topic:{topic}</p>
       <p>Created At: {new Date(created_at).toLocaleDateString()}</p>
       <p>Votes: {voteCount}</p>
-      <button onClick={handleVote}>{userVoted ? "Unvote" : "Vote"}</button>
+      <button onClick={handleUpVote}>
+        {userUpvoted ? "Unvote" : "UpVote"}
+      </button>
+      <button onClick={handleDownvote}>
+        {userDownvoted ? "Unvote" : "DownVote"}
+      </button>
       <p>{body}</p>
 
       <div className="comments-section">
         <h3>Comments</h3>
-        {comments.map((comment, index) => (
-          <div key={index}>
+        <form className="post-comment" onSubmit={handleCommentSubmit}>
+          <textarea
+            value={commentBody}
+            onChange={handleCommentChange}
+            placeholder="Leave a comment..."
+            required
+          ></textarea>
+          <button type="submit">Post Comment</button>
+        </form>
+        {comments.map((comment) => (
+          <div key={comment.comment_id}>
             <p>{comment.body}</p>
             <p>By: {comment.author}</p>
+            <p>Votes: {comment.votes}</p>
+            <p>Created At: {new Date(comment.created_at).toLocaleString()}</p>
           </div>
         ))}
       </div>

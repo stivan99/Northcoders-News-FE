@@ -4,12 +4,13 @@ import axios from "axios";
 import Article from "./Article";
 import { LoadingSpinner } from "./LoadingSpinner";
 
-function ArticleDetail() {
+function OpenedArticle() {
   const { article_id } = useParams();
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [comments, setComments] = useState([]);
   const [isCommentsLoading, setIsCommentsLoading] = useState(true);
+  const [commentBody, setCommentBody] = useState("");
 
   useEffect(() => {
     axios
@@ -41,23 +42,54 @@ function ArticleDetail() {
       });
   }, [article_id]);
 
+  const handleCommentChange = (e) => {
+    setCommentBody(e.target.value);
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    const newComment = {
+      body: commentBody,
+      votes: 0,
+      author: "grumpy19",
+      article_id: article_id,
+    };
+
+    axios
+      .post(
+        `https://northcoders-news-be.onrender.com/api/articles/${article_id}/comments`,
+        newComment
+      )
+      .then((response) => {
+        setComments([response.data, ...comments]);
+        setCommentBody("");
+      })
+      .catch((error) => {
+        console.error("Error posting comment:", error);
+      });
+  };
+
   if (isLoading || isCommentsLoading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <Article
-      title={article.title}
-      topic={article.topic}
-      body={article.body}
-      imageUrl={article.article_img_url}
-      created_at={article.created_at}
-      author={article.author}
-      votes={article.votes}
-      comments={comments}
-      isOpenedArticle={true}
-    />
+    <div>
+      <Article
+        title={article.title}
+        topic={article.topic}
+        body={article.body}
+        imageUrl={article.article_img_url}
+        created_at={article.created_at}
+        author={article.author}
+        votes={article.votes}
+        comments={comments}
+        isOpenedArticle={true}
+        commentBody={commentBody}
+        handleCommentChange={handleCommentChange}
+        handleCommentSubmit={handleCommentSubmit}
+      />
+    </div>
   );
 }
-
-export default ArticleDetail;
+export default OpenedArticle;
